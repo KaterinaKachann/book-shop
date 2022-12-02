@@ -1,15 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap");
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  line-height: 1.25;
+  font-family: "Nanum Gothic", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 1px;
+  line-height: 1.6;
 }
-
 .container {
   max-width: 1050px;
   width: 90%;
@@ -18,7 +17,8 @@ body {
 
 .navbar {
   width: 100%;
-  box-shadow: 0 1px 4px rgb(146 161 176 / 15%);
+  border-bottom: 1px solid #212121;
+  margin-bottom: 60px;
 }
 
 .nav-container {
@@ -38,8 +38,8 @@ body {
 
 .navbar .nav-container a {
   text-decoration: none;
-  color: #0e2431;
-  font-weight: 500;
+  color: #212121;
+  font-weight: 400;
   font-size: 1.2rem;
   padding: 0.7rem;
 }
@@ -81,10 +81,10 @@ body {
 
 .nav-container .hamburger-lines .line {
   display: block;
-  height: 4px;
+  height: 2px;
   width: 100%;
   border-radius: 10px;
-  background: #0e2431;
+  background: #212121;
 }
 
 .nav-container .hamburger-lines .line1 {
@@ -118,7 +118,7 @@ body {
 .navbar .menu-items li {
   margin-bottom: 1.2rem;
   font-size: 1.5rem;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .logo-image {
@@ -149,7 +149,7 @@ body {
 }
 
 .nav-container input[type="checkbox"]:checked ~ .hamburger-lines .line1 {
-  transform: rotate(45deg);
+  transform: rotate(50deg);
 }
 
 .nav-container input[type="checkbox"]:checked ~ .hamburger-lines .line2 {
@@ -157,9 +157,5 @@ body {
 }
 
 .nav-container input[type="checkbox"]:checked ~ .hamburger-lines .line3 {
-  transform: rotate(-45deg);
+  transform: rotate(-50deg);
 }
-
-/* .nav-container input[type="checkbox"]:checked ~ .logo {
-  display: none;
-} */
