@@ -123,7 +123,7 @@ window.addEventListener("click", function (e) {
     modalBasket.style.display = "block";
     modalBasket.style.overflow = "auto";
     document.getElementsByTagName("body")[0].style.overflow = "hidden";
-    updatePrice();
+    totalPrice();
   }
   // --------- Button Close Modal Basket -------
   if (e.target.className == "basket-close") {
@@ -137,14 +137,19 @@ window.addEventListener("click", function (e) {
   }
   // --------- Button Add Item To Basket -------
   if (e.target.className == "btn-add-img") {
-    count++;
     updateBasket(count);
     addItemToBasket(e);
   }
+  // --------- Button Add Item To Basket -------
+  if (e.target.className == "item-remove") {
+    removeItem(e);
+  }
 });
 
-function updateBasket(count) {
-  document.getElementsByClassName("card-quantity")[0].textContent = count;
+function updateBasket() {
+  let listItems = document.querySelectorAll(".basket-item");
+  document.getElementsByClassName("card-quantity")[0].textContent =
+    1 + listItems.length;
 }
 
 function addItemToBasket(e) {
@@ -159,7 +164,7 @@ function addItemToBasket(e) {
   ].innerText;
   let containerItem = document.getElementsByClassName("list-item");
   let item = document.createElement("div");
-  item.classList.add('basket-item-container')
+  item.classList.add("basket-item-container");
   item.innerHTML = `
     <div class="basket-item">
     <button class="item-remove">&times;</button>
@@ -170,20 +175,36 @@ function addItemToBasket(e) {
     <p class="item-price">${price}</p>
     </div>
     `;
-    containerItem[0].appendChild(item);
+  containerItem[0].appendChild(item);
+
+  let listImg = document.getElementsByClassName('')
+  // for (let i = 0; i < imageItem.length; i++){
+  //   if (imageItem[i].src == imageItem){
+  //     alert ('This item has already been added to the cart')
+  //     return;
+  //   }
+  // }
 }
 
-function updatePrice(){
+function totalPrice() {
   let total = 0;
-  let listItems = document.querySelectorAll('.basket-item');
-  for(let i = 0; i < listItems.length; i++){
-    let itemPrice = listItems[i].getElementsByClassName('item-price')[0];
-    let price = parseFloat(itemPrice.innerText.replace('$', ''))
-    let itemQuantity = listItems[i].getElementsByClassName('item-quantity')[0].value
-    total = total + (price * itemQuantity )
+  let listItems = document.querySelectorAll(".basket-item");
+  document.getElementsByClassName("card-quantity")[0].textContent =
+    listItems.length;
+  for (let i = 0; i < listItems.length; i++) {
+    let itemPrice = listItems[i].getElementsByClassName("item-price")[0];
+    let price = parseFloat(itemPrice.innerText.replace("$", ""));
+    let itemQuantity =
+    listItems[i].getElementsByClassName("item-quantity")[0].value;
+    total = total + price * itemQuantity;
   }
-  let totalContainer = document.getElementsByClassName('total-value')[0];
-  totalContainer.innerText = "$ " + total + ".00"
+  let totalContainer = document.getElementsByClassName("total-value")[0];
+  totalContainer.innerText = "$ " + total + ".00";
+}
+
+function removeItem(e) {
+  e.target.parentElement.parentElement.remove();
+  totalPrice();
 }
 
 // --------- Start Footer -------
