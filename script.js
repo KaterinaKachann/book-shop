@@ -2,7 +2,6 @@ import books from "./books.json" assert { type: "json" };
 
 let wrapper = document.getElementsByClassName("wrapper");
 
-
 // --------- Start Header -------
 const header = document.createElement("header");
 header.innerHTML = `
@@ -29,15 +28,12 @@ header.innerHTML = `
                 <div class="modal-content">
                    <button class="basket-close">&times;</button>
                     <div class="container-modal-basket">
-                      <h1>Basket</h1>
-                      <div class="basket-item-container">
-                        <div class="basket-item">
-                        <p>1</p>
-                        <img src="./assets/images/1.png" alt="img" style="height:100px"/>
-                        <p>Title</p>
-                        <p>Count</p>
-                        <p>Price</p>
+                      <h1 class="title-basket">Basket</h1>
+                      <div class="list-item">
                       </div>
+                      <div class="item-total">
+                      <div >Total:</div>
+                      <div class="total-value"></div>
                       </div>
                     </div>
                  </div>
@@ -76,7 +72,7 @@ for (let i = 0; i < books.length; i++) {
             </div>
             <div class="product-button">
             <button class="btn-more" key="${i}"><img class="btn-more" key="${i}" src="./assets/icon/three-dots.png"/></button>
-            <button class="btn-add" key="${i}"><img class="btn-add-img" key="${i}" src="./assets/icon/add.png"/></button>
+            <button class="btn-add" key="${i}"><img class="btn-add-img" key="${i}" id="${i}" src="./assets/icon/add.png"/></button>
             </div>
         </div>
         <div class="product-modal" key="${i}">
@@ -89,7 +85,7 @@ for (let i = 0; i < books.length; i++) {
                   <p>${books[i].description}</p>
                 </div>
                 <div class="content-img">
-                  <img src="${books[i].imageLink}" alt="img-1">
+                  <img src="${books[i].imageLink}" alt="img-1" class="item-img">
                 </div>
               </div>
            </div>
@@ -107,47 +103,87 @@ const addToCart = document.querySelectorAll(".btn-add-img");
 let count = 0;
 
 window.addEventListener("click", function (e) {
-
-// --------- Button Open Modal About Cards -------
+  // --------- Button Open Modal About Cards -------
   if (e.target.className == "btn-more") {
     modal[e.target.getAttribute("key")].style.display = "block";
     document.getElementsByTagName("body")[0].style.overflow = "hidden";
   }
-// --------- Button Close Modal About Cards -------
+  // --------- Button Close Modal About Cards -------
   if (e.target.className == "close") {
     modal[e.target.getAttribute("key")].style.display = "none";
     document.getElementsByTagName("body")[0].style.overflow = "auto";
   }
-// --------- Close Modal About Cards -------
+  // --------- Close Modal About Cards -------
   if (e.target.className == "product-modal") {
     modal[e.target.getAttribute("key")].style.display = "none";
     document.getElementsByTagName("body")[0].style.overflow = "auto";
   }
-// --------- Button Open Modal Basket -------
+  // --------- Button Open Modal Basket -------
   if (e.target.className == "basket-btn-img") {
     modalBasket.style.display = "block";
+    modalBasket.style.overflow = "auto";
     document.getElementsByTagName("body")[0].style.overflow = "hidden";
+    updatePrice();
   }
-// --------- Button Close Modal Basket -------
-  if(e.target.className == "basket-close") {
+  // --------- Button Close Modal Basket -------
+  if (e.target.className == "basket-close") {
     modalBasket.style.display = "none";
     document.getElementsByTagName("body")[0].style.overflow = "auto";
- }
-// --------- Close Modal About Cards -------
+  }
+  // --------- Close Modal About Cards -------
   if (e.target.className == "basket-modal") {
-  modalBasket.style.display = "none";
-  document.getElementsByTagName("body")[0].style.overflow = "auto";
- }
-// --------- Button Add Item To Basket -------
+    modalBasket.style.display = "none";
+    document.getElementsByTagName("body")[0].style.overflow = "auto";
+  }
+  // --------- Button Add Item To Basket -------
   if (e.target.className == "btn-add-img") {
     count++;
     updateBasket(count);
+    addItemToBasket(e);
   }
 });
 
-
 function updateBasket(count) {
   document.getElementsByClassName("card-quantity")[0].textContent = count;
+}
+
+function addItemToBasket(e) {
+  let cartItem = e.target.id;
+  let price =
+    document.getElementsByClassName("text-price")[+cartItem].innerText;
+  let imageItem = document.getElementsByClassName("item-img")[+cartItem].src;
+  let titleItem =
+    document.getElementsByClassName("product-text-title")[+cartItem].innerText;
+  let authorItem = document.getElementsByClassName("product-text-author")[
+    +cartItem
+  ].innerText;
+  let containerItem = document.getElementsByClassName("list-item");
+  let item = document.createElement("div");
+  item.classList.add('basket-item-container')
+  item.innerHTML = `
+    <div class="basket-item">
+    <button class="item-remove">&times;</button>
+    <img src=${imageItem} alt="img" style="height: 100px" />
+    <p>${titleItem}</p>
+    <p>${authorItem}</p>
+    <input class="item-quantity" type="number" value="1"/>
+    <p class="item-price">${price}</p>
+    </div>
+    `;
+    containerItem[0].appendChild(item);
+}
+
+function updatePrice(){
+  let total = 0;
+  let listItems = document.querySelectorAll('.basket-item');
+  for(let i = 0; i < listItems.length; i++){
+    let itemPrice = listItems[i].getElementsByClassName('item-price')[0];
+    let price = parseFloat(itemPrice.innerText.replace('$', ''))
+    let itemQuantity = listItems[i].getElementsByClassName('item-quantity')[0].value
+    total = total + (price * itemQuantity )
+  }
+  let totalContainer = document.getElementsByClassName('total-value')[0];
+  totalContainer.innerText = "$ " + total + ".00"
 }
 
 // --------- Start Footer -------
