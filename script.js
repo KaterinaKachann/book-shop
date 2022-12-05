@@ -27,14 +27,16 @@ header.innerHTML = `
               <div class="basket-modal">
                 <div class="modal-content">
                    <button class="basket-close">&times;</button>
-                    <div class="container-modal-basket">
                       <h1 class="title-basket">Basket</h1>
+                      <div class="container-modal-basket">
                       <div class="list-item">
                       </div>
                       <div class="item-total">
-                      <div >Total:</div>
+                      <div>Total:</div>
                       <div class="total-value"></div>
-                      </div>
+                      <button class="item-button-send">Send</button>
+                    
+                  
                     </div>
                  </div>
               </div>
@@ -93,8 +95,51 @@ for (let i = 0; i < books.length; i++) {
      </div>
     `;
 }
-
 wrapper[0].appendChild(main);
+
+let modalForm = document.createElement('div');
+modalForm.classList.add("send-form-modal");
+modalForm.innerHTML = `
+<div class="modal-content-form">
+<button class="send-form-close">&times;</button>
+<form>
+<h1>Send books</h1>
+<label for="Name">Name:</label>
+<input type="text" id="name" placeholder="Enter Name" required />
+<label for="Surname">Surname:</label>
+<input type="text id="Surname" placeholder="Enter Surname" required />
+<label for="Delivery">Delivery Date:</label>
+<input type="date" id="Delivery" required />
+<label for="Street">Street:</label>
+<input type="text" id="Street" placeholder="Enter Street" required />
+<label for="House">House Number:</label>
+<input type="number" id="House" placeholder="Enter House Number" required />
+<label for="Flat">Flat Number:</label>
+<input type="number" id="Flat" placeholder="Enter Flat Number" required />
+<fieldset>
+<legend>Choose the payment type:</legend>
+<label for="Cash">
+<input type="radio" id="Cash" name="payment" required/>Cash</label>
+<label for="Card">
+<input type="radio" id="Card" name="payment" required>Card</label>
+</fieldset>
+<fieldset>
+<legend>Choose 2 gifts:</legend>
+<input type="checkbox" id="pack" required/>
+<label for="pack">pack as a gift </label>
+<input type="checkbox" id="postcard" required>
+<label for="Card">add postcard</label>
+<input type="checkbox" id="discount" required>
+<label for="discount">provide 2% discount to the next time</label>
+<input type="checkbox" id="pen" required>
+<label for="pen">branded pen or pencil</label>
+</fieldset>
+<input type="submit" value="Send"/>
+</form>
+</div>`;
+wrapper[0].appendChild(modalForm)
+
+
 // --------- End Main Cards -------
 
 let modal = document.querySelectorAll(".product-modal");
@@ -144,6 +189,28 @@ window.addEventListener("click", function (e) {
   if (e.target.className == "item-remove") {
     removeItem(e);
   }
+  // --------- Button Open Form Send -------
+  if (e.target.className == "item-button-send") {
+    let formSend = document.getElementsByClassName('send-form-modal')[0];
+    formSend.style.display = "block";
+    document.getElementsByTagName("body")[0].style.overflow = "hidden";
+    formSend.style.overflow = "auto";
+    modalBasket.style.display = "none";
+  }
+ // --------- Button Close Form Send -------
+ if (e.target.className == "send-form-close") {
+  let formSend = document.getElementsByClassName('send-form-modal')[0];
+  formSend.style.display = "none";
+  document.getElementsByTagName("body")[0].style.overflow = "hidden";
+  modalBasket.style.display = "block";
+  modalBasket.style.overflow = "auto";
+}
+});
+
+window.addEventListener("change", function (e) {
+  if (e.target.className == "item-quantity") {
+    totalPrice();
+  }
 });
 
 function updateBasket() {
@@ -168,22 +235,14 @@ function addItemToBasket(e) {
   item.innerHTML = `
     <div class="basket-item">
     <button class="item-remove">&times;</button>
-    <img src=${imageItem} alt="img" style="height: 100px" />
+    <img src=${imageItem} alt="img" style="height: 100px" class="img"/>
     <p>${titleItem}</p>
     <p>${authorItem}</p>
-    <input class="item-quantity" type="number" value="1"/>
+    <input class="item-quantity" type="number" value="1" min="0" max="5"/>
     <p class="item-price">${price}</p>
     </div>
     `;
   containerItem[0].appendChild(item);
-
-  let listImg = document.getElementsByClassName('')
-  // for (let i = 0; i < imageItem.length; i++){
-  //   if (imageItem[i].src == imageItem){
-  //     alert ('This item has already been added to the cart')
-  //     return;
-  //   }
-  // }
 }
 
 function totalPrice() {
@@ -195,7 +254,7 @@ function totalPrice() {
     let itemPrice = listItems[i].getElementsByClassName("item-price")[0];
     let price = parseFloat(itemPrice.innerText.replace("$", ""));
     let itemQuantity =
-    listItems[i].getElementsByClassName("item-quantity")[0].value;
+      listItems[i].getElementsByClassName("item-quantity")[0].value;
     total = total + price * itemQuantity;
   }
   let totalContainer = document.getElementsByClassName("total-value")[0];
