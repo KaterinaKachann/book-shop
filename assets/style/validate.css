@@ -42,3 +42,6 @@ form{
     pointer-events: none;
     background-color: rgb(129, 129, 129)
   }
+  .result{
+      display: none;
+  }

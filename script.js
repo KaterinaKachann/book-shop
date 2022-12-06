@@ -48,7 +48,8 @@ header.innerHTML = `
     </div>
   </div>
 </nav>
-</div>`;
+</div>
+`;
 
 wrapper[0].appendChild(header);
 // --------- End Header -------

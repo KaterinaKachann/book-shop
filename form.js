@@ -6,7 +6,7 @@ modalForm.classList.add("send-form-modal");
 modalForm.innerHTML = `
 <div class="modal-content-form">
 <button class="send-form-close">&times;</button>
-<form id="form">
+<form id="form" active onsubmit="event.preventDefault();">
 <h1>Send books</h1>
 <label for="name">Name:</label>
 <input type="text" id="name" placeholder="Enter Name" required />
@@ -53,6 +53,12 @@ modalForm.innerHTML = `
 </fieldset>
 <button class="submit-btn" type="submit" disabled>Submit</button>
 </form>
+<div class="result">
+<p>The Order Created</p>
+<p class="name-order"></p>
+<p class="address-order"></p>
+<p>Thank you</p>
+</div>
 </div>`;
 wrapper[0].appendChild(modalForm);
 
@@ -133,7 +139,7 @@ function validateStreet(e) {
 }
 
 function validateHouseNumber(e) {
-  if (e.target.value <= 1) {
+  if (e.target.value < 1) {
     errorMsgNumbersHouse.style.display = "block";
     houseInput.classList.add("input-error");
   } else {
@@ -144,7 +150,7 @@ function validateHouseNumber(e) {
 }
 
 function validateFlatNumber(e) {
-  if (e.target.value <= 1) {
+  if (e.target.value < 1) {
     errorMsgNumbersFlat.style.display = "block";
     flatInput.classList.add("input-error");
   } else {
@@ -219,8 +225,33 @@ window.addEventListener("change", function (e) {
     validateFlatNumber(e);
   }
 });
+let btnSubmit = document.querySelector('.submit-btn')
 
-window.addEventListener("submit", function (e) {
-  if (e.target.className == "submit-btn") {
-  }
+function handleSubmit(e){
+    e.preventDefault();
+    let form = document.querySelector('form')
+    let formData = new FormData(form);
+    form.remove();
+    document.querySelector('.result').style.display = "block";
+
+    let nameOrder = document.querySelector('.name-order');
+    let addressOrder = document.querySelector('.address-order')
+    nameOrder.innerHTML += `Name: ${formData.get('name')}, Surname:${formData.get('surname')}`;
+    addressOrder.innerHTML += `Address: ${formData.get('street')},${formData.get('house')},${formData.get('flat')}`
+    console.log('1')
+}
+window.addEventListener("click", function(e){
+    if(e.target.className == "submit-btn"){
+        e.preventDefault();
+        let form = document.querySelector('form')
+        let formData = new FormData(form);
+        form.remove();
+        document.querySelector('.result').style.display = "block";
+    
+        let nameOrder = document.querySelector('.name-order');
+        let addressOrder = document.querySelector('.address-order')
+
+        nameOrder.innerHTML += `Name: ${nameInput.value}, Surname:${surnameInput.value}`;
+        addressOrder.innerHTML += `Address: ${streetInput.value},${houseInput.value},${flatInput.value}`
+    }
 });
