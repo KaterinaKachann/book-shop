@@ -1,0 +1,18 @@
+.error-mesg-length-name,
+.error-mesg-letters-name,
+.error-mesg-space-name,
+.error-mesg-length-surname,
+.error-mesg-letters-surname,
+.error-mesg-space-surname,
+.error-mesg-length-street,
+.error-mesg-numbers-house,
+.error-mesg-numbers-flat {
+  display: none;
+  color: rgb(219, 60, 60);
+}
+
+.input-error {
+  border: none;
+  border-bottom: 1px solid rgb(219, 60, 60);
+  color: rgb(219, 60, 60);
+}
