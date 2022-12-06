@@ -6,50 +6,49 @@ let wrapper = document.getElementsByClassName("wrapper");
 const header = document.createElement("header");
 header.innerHTML = `
 <div class="burger-menu">
-        <nav>
-          <div class="navbar">
-            <div class="container nav-container">
-              <input class="checkbox" type="checkbox" name="" id="" />
-              <div class="hamburger-lines">
-                <span class="line line1"></span>
-                <span class="line line2"></span>
-                <span class="line line3"></span>
+<nav>
+  <div class="navbar">
+    <div class="container nav-container">
+      <input class="checkbox" type="checkbox" name="" id="" />
+      <div class="hamburger-lines">
+        <span class="line line1"></span>
+        <span class="line line2"></span>
+        <span class="line line3"></span>
+      </div>
+      <div class="logo-image">
+        <img src="./assets/icon/logo.png" alt="logo" />
+      </div>
+      <div class="basket-button">
+        <button class="basket-btn">
+          <img src="./assets/icon/card.png" alt="basket" class="basket-btn-img"/>
+          <span class="card-quantity">0</span>
+        </button>
+      </div>
+      <div class="basket-modal">
+        <div class="modal-content">
+           <button class="basket-close">&times;</button>
+              <h1 class="title-basket">Basket</h1>
+              <div class="container-modal-basket">
+              <div class="list-item">
               </div>
-              <div class="logo-image">
-                <img src="./assets/icon/logo.png" alt="logo" />
-              </div>
-              <div class="basket-button">
-                <button class="basket-btn">
-                  <img src="./assets/icon/card.png" alt="basket" class="basket-btn-img"/>
-                  <span class="card-quantity">0</span>
-                </button>
-              </div>
-              <div class="basket-modal">
-                <div class="modal-content">
-                   <button class="basket-close">&times;</button>
-                      <h1 class="title-basket">Basket</h1>
-                      <div class="container-modal-basket">
-                      <div class="list-item">
-                      </div>
-                      <div class="item-total">
-                      <div>Total:</div>
-                      <div class="total-value"></div>
-                      <button class="item-button-send">Send</button>
-                    
-                  
-                    </div>
-                 </div>
-              </div>
-              <div class="menu-items">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Books</a></li>
-                <li><a href="#">Contacts</a></li>
-              </div>
+              <div class="item-total">
+              <div>Total:</div>
+              <div class="total-value"></div>
+              <button class="item-button-send">Send</button>
             </div>
-          </div>
-        </nav>
-      </div>`;
+         </div>
+      </div>
+      
+    </div>
+    <div class="menu-items">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Books</a></li>
+      <li><a href="#">Contacts</a></li>
+    </div>
+  </div>
+</nav>
+</div>`;
 
 wrapper[0].appendChild(header);
 // --------- End Header -------
@@ -124,17 +123,25 @@ modalForm.innerHTML = `
 <input type="radio" id="Card" name="payment" required>Card</label>
 </fieldset>
 <fieldset>
-<legend>Choose 2 gifts:</legend>
-<input type="checkbox" id="pack" required/>
-<label for="pack">pack as a gift </label>
-<input type="checkbox" id="postcard" required>
-<label for="Card">add postcard</label>
-<input type="checkbox" id="discount" required>
-<label for="discount">provide 2% discount to the next time</label>
-<input type="checkbox" id="pen" required>
-<label for="pen">branded pen or pencil</label>
+<legend>Choose 2 gifts(optional):</legend>
+<div>
+<input type="checkbox" id="pack" value="pack" class="gift"/>
+<label for="pack">Pack as a gift </label>
+</div>
+<div>
+<input type="checkbox" id="postcard" value="postcard" class="gift">
+<label for="Card">Add postcard</label>
+</div>
+<div>
+<input type="checkbox" id="discount" value="discount" class="gift">
+<label for="discount">Provide 2% discount to the next time</label>
+</div>
+<div>
+<input type="checkbox" id="pen" value="pen" class="gift">
+<label for="pen">Branded pen or pencil</label>
+</div>
 </fieldset>
-<input type="submit" value="Send"/>
+<button class="submit-btn" type="submit" disabled>Submit</button>
 </form>
 </div>`;
 wrapper[0].appendChild(modalForm)
@@ -207,6 +214,7 @@ window.addEventListener("click", function (e) {
 }
 });
 
+ // --------- Event which change quantity -------
 window.addEventListener("change", function (e) {
   if (e.target.className == "item-quantity") {
     totalPrice();
@@ -265,6 +273,48 @@ function removeItem(e) {
   e.target.parentElement.parentElement.remove();
   totalPrice();
 }
+
+let counterGift = 0
+
+function disableChooseGift() {
+  const gifts = document.querySelectorAll('.gift');
+  gifts.forEach(gift => {
+      if (!gift.checked) {
+          gift.disabled = true;
+      }
+  });
+}
+
+function enableChooseGift() {
+  const gifts = document.querySelectorAll('.gift');
+  gifts.forEach(gift => {
+      gift.disabled = false;
+  });
+}
+
+function checkChoosenGift(e) {
+  const checked = e.currentTarget.checked;
+  if (checked) {
+    counterGift += 1;
+      if (counterGift == 2) {
+        disableChooseGift();
+      }
+  } else {
+      if (counterGift == 2) {
+        enableChooseGift();
+      }
+      counterGift -= 1;
+  }
+}
+
+function handleGift() {
+  const gifts = document.querySelectorAll('.gift');
+  gifts.forEach(gift => {
+      gift.addEventListener('click', checkChoosenGift)
+  });
+}
+
+handleGift();
 
 // --------- Start Footer -------
 const footer = document.createElement("footer");
